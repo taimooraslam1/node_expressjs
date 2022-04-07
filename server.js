@@ -8,6 +8,22 @@ const friends = [
   { id: 2, name: "Junaid" },
 ];
 
+app.use((res, req, next) => {
+  console.log(`${res.method} ${req.url}`);
+  next();
+});
+
+app.use(express.json());
+
+app.post("/user", (req, res) => {
+  if (!req.body.name) {
+    return res.status(400).json({ error: "Missing user name" });
+  }
+  const addNewUser = { id: friends.length, name: req.body.name };
+  friends.push(addNewUser);
+  res.json(addNewUser);
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
