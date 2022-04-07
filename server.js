@@ -1,31 +1,21 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
-const port = 3000;
-
-const friends = [
-  { id: 0, name: "Taimoor" },
-  { id: 1, name: "Talha" },
-  { id: 2, name: "Junaid" },
-];
-
+var corsOptions = {
+  origin: "http://localhost:8081",
+};
+app.use(cors(corsOptions));
+// parse requests of content-type - application/json
+app.use(express.json());
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+// simple route
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.json({ message: "Welcome to Node application." });
 });
-app.get("/user", (req, res) => {
-  res.json(friends);
-});
-app.post("/user", (req, res) => {
-  console.log("Posting");
-});
-
-app.get("/user/:userId", (req, res) => {
-  const userId = req.params.userId;
-  const user = friends[userId];
-  user
-    ? res.status(200).json(user)
-    : res.status(404).json({ error: "User not found" });
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });
